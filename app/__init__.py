@@ -9,7 +9,7 @@ def create_app():
 
     app = Flask(__name__)
     
-    # registering all the blueprints
+    # registering all the blueprints 
     app.config["MONGO_URI"] = os.getenv("MONGO_URI", "mongodb://localhost:27017/github_events")
     init_db(app)
 
