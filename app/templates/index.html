@@ -50,13 +50,13 @@
                 const date = new Date(event.timestamp);
                 const timestamp = date.toUTCString();
                 let eventClass = '';
-                if (event.type === 'push') {
+                if (event.action === 'push') {
                     eventText = `${event.author} pushed to ${event.to_branch} on ${timestamp}`;
                     eventClass = 'push';
-                } else if (event.type === 'pull_request') {
+                } else if (event.action === 'pull_request') {
                     eventText = `${event.author} submitted a pull request from ${event.from_branch} to ${event.to_branch} on ${timestamp}`;
                     eventClass = 'pull_request';
-                } else if (event.type === 'merge') {
+                } else if (event.action === 'merge') {
                     eventText = `${event.author} merged branch ${event.from_branch} to ${event.to_branch} on ${timestamp}`;
                     eventClass = 'merge';
                 }

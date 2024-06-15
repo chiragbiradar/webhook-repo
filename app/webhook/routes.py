@@ -16,7 +16,7 @@ def reciever():
     if event_type == "push":
         event = {
             "request_id": data['head_commit']['id'],
-            "type": "push",
+            "action": "push",
             "author": data['pusher']['name'],
             "to_branch": data['ref'].split('/')[-1],
             "timestamp": datetime.utcnow()
@@ -25,7 +25,7 @@ def reciever():
         if data['action'] == 'opened':
             event = {
                 "request_id": data['pull_request']['id'],
-                "type": "pull_request",
+                "action": "pull_request",
                 "author": data['pull_request']['user']['login'],
                 "from_branch": data['pull_request']['head']['ref'],
                 "to_branch": data['pull_request']['base']['ref'],
@@ -34,7 +34,7 @@ def reciever():
         elif data['action'] == "closed" and data['pull_request']['merged']:
             event = {
                 "request_id": data['pull_request']['id'],
-                "type": "merge",
+                "action": "merge",
                 "author": data['pull_request']['user']['login'],
                 "from_branch": data['pull_request']['head']['ref'],
                 "to_branch": data['pull_request']['base']['ref'],
