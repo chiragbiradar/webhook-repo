@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Github Events</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .event-list {
+            margin-top: 20px;
+        }
+        .event-item {
+            border: 1px solid #dee2e6;
+            border-radius: 0.25rem;
+            padding: 15px;
+            margin-bottom: 10px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .event-item:hover {
+            background-color: #e9ecef;
+        }
+        .push {
+            background-color: #d4edda;
+        }
+        .pull_request {
+            background-color: #cce5ff;
+        }
+        .merge {
+            background-color: #f8d7da;
+        }
+    </style>
+    <!-- JavaScript to fetch events -->
+    <script>
+        async function fetchEvents() {
+            const response = await fetch('/webhook/events');
+            const events = await response.json();
+            const eventsList = document.getElementById('events');
+            eventsList.innerHTML = '';
+            events.forEach(event => {
+                let eventText = '';
+                const date = new Date(event.timestamp);
+                const timestamp = date.toUTCString();
+                let eventClass = '';
+                if (event.type === 'push') {
+                    eventText = `${event.author} pushed to ${event.to_branch} on ${timestamp}`;
+                    eventClass = 'push';
+                } else if (event.type === 'pull_request') {
+                    eventText = `${event.author} submitted a pull request from ${event.from_branch} to ${event.to_branch} on ${timestamp}`;
+                    eventClass = 'pull_request';
+                } else if (event.type === 'merge') {
+                    eventText = `${event.author} merged branch ${event.from_branch} to ${event.to_branch} on ${timestamp}`;
+                    eventClass = 'merge';
+                }
+                const li = document.createElement('li');
+                li.textContent = eventText;
+                li.className = `event-item list-group-item ${eventClass}`;
+                eventsList.appendChild(li);
+            });
+        }
+
+        setInterval(fetchEvents, 15000);
+        window.onload = fetchEvents;
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 offset-lg-2">
+                <h1 class="text-center">Github Events</h1>
+                <ul id="events" class="list-group event-list"></ul>
+            </div>
+        </div>
+    </div>
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
